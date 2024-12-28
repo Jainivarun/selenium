@@ -1,0 +1,23 @@
+const { Builder, By, Key } = require("selenium-webdriver");
+async function googleSearch() {
+    let driver;
+    try {
+        // Initialize the WebDriver and open a new browser window
+        driver = await new Builder().forBrowser("chrome").build();
+        // Go to Google
+        await driver.get("https://www.google.com");
+        // Find the search box, enter a query, and submit
+        await driver.findElement(By.name("q")).sendKeys("Selenium WebDriver", Key.RETURN);
+        // Wait for a few seconds to see the results (optional)
+        await driver.sleep(3000);
+    } catch (error) {
+        // Handle any errors that occur during WebDriver's execution
+        console.error("An error occurred during the test:", error);
+    } finally {
+        // Ensure the browser is closed regardless of whether an error occurred
+        if (driver) {
+            await driver.quit();
+        }
+    }
+}
+googleSearch();
