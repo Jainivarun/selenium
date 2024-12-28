@@ -1,0 +1,32 @@
+const { Builder, By, Key, until } = require("selenium-webdriver");
+const chrome = require("selenium-webdriver/chrome");
+(async () => {
+  const driver = await new Builder()
+    .forBrowser("chrome")
+    .setChromeOptions(new chrome.Options())
+    .build();
+  try {
+    // Test Case 1: Verify the title of the Google homepage
+    await driver.get("https://www.google.com");
+    await driver.wait(until.titleContains("Google"), 10000);
+    console.log('Test case 1 Passed: Title contains "Google"');
+    // Test Case 2: Perform a search and verify the new title contains the search term
+    await driver.findElement(By.name("q")).sendKeys("Selenium", Key.RETURN);
+    await driver.wait(until.titleContains("Selenium"), 10000);
+    console.log("Test case 2 Passed: Title contains 'Selenium'");
+    // Test Case 3: Verify search results are displayed
+    const searchResults = await driver.findElements(By.css("div.g"));
+    console.log(Test case 3 Passed: Found ${searchResults.length} search results);
+    // Test Case 4: Verify search input box is displayed
+    const searchInput = await driver.findElement(By.name("q"));
+    const isSearchVisible = await searchInput.isDisplayed();
+    console.log(Test case 4 Passed: Search input box is displayed: ${isSearchVisible});
+    // Additional Test Case (Optional): Verify search input is enabled
+    const isEnabled = await searchInput.isEnabled();
+    console.log(Test case 5 Passed: Search input box is enabled: ${isEnabled});
+  } catch (error) {
+    console.error("Test failed", error);
+  } finally {
+    await driver.quit();
+  }
+})();
